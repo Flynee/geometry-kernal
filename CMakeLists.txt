@@ -8,7 +8,7 @@ set(CMAKE_BUILD_TYPE Debug)
 
 
 # include
-include_directories("${ROOT}/include" "${ROOT}/3rd-party/include/occ")
+include_directories("${ROOT}/include" "${ROOT}/3rd-party/include/occ" "${ROOT}/test")
 # lib
 file (GLOB ALL_LIB_SOURCES "${ROOT}/3rd-party/lib/occ/*.lib" )
 link_libraries(${ALL_LIB_SOURCES})
@@ -16,6 +16,7 @@ link_libraries(${ALL_LIB_SOURCES})
 #executable
 file (GLOB ALL_SOURCES 
     "${ROOT}/src/*.cpp" "${ROOT}/src/*.c" "${ROOT}/src/*.cxx"
-    "${ROOT}/src/prim/*.cpp" "${ROOT}/src/prim/*.c" "${ROOT}/src/prim/*.cxx")
+    "${ROOT}/src/prim/*.cpp" "${ROOT}/src/prim/*.c" "${ROOT}/src/prim/*.cxx"
+    "${ROOT}/test/*.cpp" "${ROOT}/test/*.c" "${ROOT}/test/*.cxx")
 set(ALL_SRCS ${ALL_SOURCES})
 add_executable(main ${ALL_SRCS})

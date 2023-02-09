@@ -1,6 +1,6 @@
+#include<iostream>
 #include<TopoDS.hxx>
 #include<Standard_TypeDef.hxx>
-#include<gp_Pnt.hxx>
 #include<BRepPrimAPI_MakeBox.hxx>
 #include<BRepPrimAPI_MakeCone.hxx>
 #include<BRepPrimAPI_MakeCylinder.hxx>
@@ -8,6 +8,17 @@
 #include<BRepPrimAPI_MakeTorus.hxx>
 #include<BRepPrimAPI_MakePrism.hxx>
 #include<BRepPrimAPI_MakeWedge.hxx>
+
+
+#include<BRepBuilderAPI_MakeEdge.hxx>
+#include<BRepBuilderAPI_MakeWire.hxx>
+#include<BRepBuilderAPI_MakeFace.hxx>
+#include<BRepBuilderAPI_MakePolygon.hxx>
+#include<gp_Ax2.hxx>
+#include<gp_Dir.hxx>
+#include<gp_Circ.hxx>
+#include<gp_Elips.hxx>
+#include<gp_Lin.hxx>
 
 namespace prim {
 
@@ -54,8 +65,65 @@ namespace prim {
 	}
 
 	// 椭圆体 TODO
-
+	
 	// 三角形面
+	TopoDS_Shape make_triangle_panel(const gp_Pnt& p1, const gp_Pnt& p2, const gp_Pnt& p3) {
+		BRepBuilderAPI_MakePolygon wire(p1, p2, p3, p1);
+		BRepBuilderAPI_MakeFace face(wire);
+		const TopoDS_Shape& shape = face.Shape();
+		return shape;
+	}
+
+	// 四边形面
+	TopoDS_Shape make_rectangle_panel(const gp_Pnt& p1, const gp_Pnt& p2, const gp_Pnt& p3, const gp_Pnt& p4) {
+		BRepBuilderAPI_MakePolygon wire;
+		wire.Add(p1);
+		wire.Add(p2);
+		wire.Add(p3);
+		wire.Add(p4);
+		wire.Add(p1);
+
+		BRepBuilderAPI_MakeFace face(wire);
+		const TopoDS_Shape& shape = face.Shape();
+		return shape;
+	}
+
+	// 圆面 
+	TopoDS_Shape make_circle_panel(Standard_Real r) {
+		gp_Ax2 a2;
+		gp_Circ gpc(a2, r);
+		BRepBuilderAPI_MakeEdge edge(gpc);
+		BRepBuilderAPI_MakeWire wire(edge);
+		BRepBuilderAPI_MakeFace face(wire);
+		const TopoDS_Shape& shape = face.Shape();
+		return shape; 
+	}
+
+	// 椭圆面
+	TopoDS_Shape make_ellipse_panel(Standard_Real r1, Standard_Real r2) {
+		gp_Ax2 a2;
+		gp_Elips gpe(a2, r1, r2);
+		BRepBuilderAPI_MakeEdge edge(gpe);
+		BRepBuilderAPI_MakeWire wire(edge);
+		BRepBuilderAPI_MakeFace face(wire);
+		const TopoDS_Shape& shape = face.Shape();
+		return shape;
+	}
+
+	// 多边形面
+	TopoDS_Shape make_polygon_panel(const gp_Pnt list[], int size) {
+		BRepBuilderAPI_MakePolygon wire;
+		for (int i = 0; i < size; i++) {
+			gp_Pnt p = list[i];
+			wire.Add(p);
+		}
+		gp_Pnt p = list[0];
+		wire.Add(p);
+		BRepBuilderAPI_MakeFace face(wire);
+		const TopoDS_Shape& shape = face.Shape();
+		return shape;
+	}
+
 
 
 
