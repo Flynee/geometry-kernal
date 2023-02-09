@@ -1,5 +1,9 @@
 #ifndef __PRIMITIVE_H__
 #define __PRIMITIVE_H__
+#include<TopoDS.hxx>
+#include<Standard_TypeDef.hxx>
+#include<TColgp_Array1OfPnt.hxx>
+#include<gp_Pnt.hxx>
 
 namespace prim {
 	
@@ -20,6 +24,15 @@ namespace prim {
 		TopoDS_Shape make_ellipse_panel(Standard_Real r1, Standard_Real r2);
 		TopoDS_Shape make_polygon_panel(const gp_Pnt pt[], int size);
 		TopoDS_Shape make_paraboloid_panel(Standard_Real min, Standard_Real max, Standard_Real f);
+
+		// Ïß
+		TopoDS_Shape make_segment(const gp_Pnt& p1, const gp_Pnt& p2);
+		TopoDS_Shape make_polyline(const gp_Pnt list[], int size);
+		TopoDS_Shape make_circle(Standard_Real r);
+		TopoDS_Shape  make_ellipse(Standard_Real r1, Standard_Real r2);
+		TopoDS_Shape make_bezier_curve(const TColgp_Array1OfPnt& list);
+		TopoDS_Shape make_parabola(Standard_Real min, Standard_Real max, Standard_Real f);
+		TopoDS_Shape make_hyperbola(Standard_Real major, Standard_Real minor, Standard_Real min, Standard_Real max);
 }
 
 #endif // !__PRIMITIVE_H__

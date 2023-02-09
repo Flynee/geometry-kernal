@@ -5,7 +5,7 @@ int main() {
 
     std::cout<<"SYSTEM IS RUNNING..."<<std::endl;
     
-    test::make_paraboloid_panel();
+    test::make_hyperbola();
 
     return 0;
 
