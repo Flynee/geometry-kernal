@@ -1,4 +1,6 @@
 #include<iostream>
+#include<math.h>
+
 #include<TopoDS.hxx>
 #include<Standard_TypeDef.hxx>
 #include<BRepPrimAPI_MakeBox.hxx>
@@ -14,18 +16,24 @@
 #include<BRepBuilderAPI_MakeWire.hxx>
 #include<BRepBuilderAPI_MakeFace.hxx>
 #include<BRepBuilderAPI_MakePolygon.hxx>
+#include<BRepPrimAPI_MakeRevol.hxx>
+#include<GC_MakeArcOfParabola.hxx>
 #include<gp_Ax2.hxx>
+#include<gp_Ax1.hxx>
 #include<gp_Dir.hxx>
 #include<gp_Circ.hxx>
 #include<gp_Elips.hxx>
 #include<gp_Lin.hxx>
+#include<gp_Parab.hxx>
+#include<Geom_Curve.hxx>
+#include<Geom_TrimmedCurve.hxx>
 
 namespace prim {
 
 	// 创建方体
 	TopoDS_Shape make_box(Standard_Real dx, Standard_Real dy, Standard_Real dz) {
 		BRepPrimAPI_MakeBox box(dx, dy, dz);
-		const TopoDS_Shape&  shape = box.Shape();
+		const TopoDS_Shape& shape = box.Shape();
 		return shape;
 	}
 
@@ -58,14 +66,14 @@ namespace prim {
 	}
 
 	// 棱锥体/棱柱 （用楔子构造）
-	TopoDS_Shape make_prism( Standard_Real dx, Standard_Real dy, Standard_Real dz, Standard_Real xmin, Standard_Real zmin, Standard_Real xmax, Standard_Real zmax) {
+	TopoDS_Shape make_prism(Standard_Real dx, Standard_Real dy, Standard_Real dz, Standard_Real xmin, Standard_Real zmin, Standard_Real xmax, Standard_Real zmax) {
 		BRepPrimAPI_MakeWedge wedge(dx, dy, dz, xmin, zmin, xmax, zmax);
 		const TopoDS_Shape& shape = wedge.Shape();
 		return shape;
 	}
 
 	// 椭圆体 TODO
-	
+
 	// 三角形面
 	TopoDS_Shape make_triangle_panel(const gp_Pnt& p1, const gp_Pnt& p2, const gp_Pnt& p3) {
 		BRepBuilderAPI_MakePolygon wire(p1, p2, p3, p1);
@@ -96,7 +104,7 @@ namespace prim {
 		BRepBuilderAPI_MakeWire wire(edge);
 		BRepBuilderAPI_MakeFace face(wire);
 		const TopoDS_Shape& shape = face.Shape();
-		return shape; 
+		return shape;
 	}
 
 	// 椭圆面
@@ -121,6 +129,20 @@ namespace prim {
 		wire.Add(p);
 		BRepBuilderAPI_MakeFace face(wire);
 		const TopoDS_Shape& shape = face.Shape();
+		return shape;
+	}
+
+	// 抛物面
+	TopoDS_Shape make_paraboloid_panel(Standard_Real min, Standard_Real max, Standard_Real f) {
+		gp_Ax1 a1(gp_Pnt(0, 0, 0), gp_Dir(1.0, 0, 0));
+		gp_Ax2 a2;
+		gp_Parab gpp(a2, f);
+		GC_MakeArcOfParabola tc(gpp, min, max, true);
+		Handle(Geom_TrimmedCurve) tcurve = tc.Value();
+	
+		BRepBuilderAPI_MakeEdge edge(tcurve);
+		const TopoDS_Shape& shape = BRepPrimAPI_MakeRevol(edge, a1);
+
 		return shape;
 	}
 

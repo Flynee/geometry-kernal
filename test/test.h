@@ -15,6 +15,7 @@ namespace test {
 	void make_triangle_panel();
 	void make_rectangle_panel();
 	void make_polygon_panel();
+	void make_paraboloid_panel();
 
 	void bool_box();
 

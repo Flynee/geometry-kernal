@@ -121,4 +121,10 @@ namespace test {
 		BRepTools::Write(shape, "../shape.brep");
 
 	}
+
+	void make_paraboloid_panel() {
+		
+		const TopoDS_Shape& shape = prim::make_paraboloid_panel(0., 4.0, 1.0);
+		BRepTools::Write(shape, "../shape.brep");
+	}
 }

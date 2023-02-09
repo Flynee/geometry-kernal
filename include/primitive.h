@@ -19,6 +19,7 @@ namespace prim {
 		TopoDS_Shape make_circle_panel(Standard_Real r);
 		TopoDS_Shape make_ellipse_panel(Standard_Real r1, Standard_Real r2);
 		TopoDS_Shape make_polygon_panel(const gp_Pnt pt[], int size);
+		TopoDS_Shape make_paraboloid_panel(Standard_Real min, Standard_Real max, Standard_Real f);
 }
 
 #endif // !__PRIMITIVE_H__

@@ -5,7 +5,7 @@ int main() {
 
     std::cout<<"SYSTEM IS RUNNING..."<<std::endl;
     
-    test::bool_box();
+    test::make_paraboloid_panel();
 
     return 0;
 
