@@ -5,7 +5,7 @@ int main() {
 
     std::cout<<"SYSTEM IS RUNNING..."<<std::endl;
     
-    test::make_hyperbola();
+    test::mirror_shape();
 
     return 0;
 

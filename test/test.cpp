@@ -1,13 +1,20 @@
 #include<iostream>
+#include<math.h>
 #include<TopoDS.hxx>
 #include<BRepTools.hxx>
-#include<gp_Pnt.hxx>
 
-#include"primitive.h"
 #include<BRepAlgoAPI_BooleanOperation.hxx>
 #include<BRep_Builder.hxx>
 #include<TopTools_ListOfShape.hxx>
 #include<TColgp_Array1OfPnt.hxx>
+#include<gp_Pnt.hxx>
+#include<gp_Vec.hxx>
+#include<gp_Ax1.hxx>
+#include<gp_Ax2.hxx>
+#include<gp_Dir.hxx>
+
+#include"primitive.h"
+#include"transform.h"
 
 namespace test {
 	// 测试创建方体
@@ -188,9 +195,54 @@ namespace test {
 		const TopoDS_Shape& shape = prim::make_parabola(-4.0, 4.0, 1.0);
 		BRepTools::Write(shape, "../shape.brep");
 	}
-
+	
+	// 测试创建双曲线
 	void make_hyperbola() {
 		const TopoDS_Shape& shape = prim::make_hyperbola(4.0, 2.0, -2.0, 2.0);
 		BRepTools::Write(shape, "../shape.brep");
 	}
+
+	// 测试平移功能
+	void transform_shape() {
+		TopoDS_Shape shape;
+		BRep_Builder builder;
+
+		BRepTools::Read(shape, "../box33.brep", builder);
+
+		shape = transf::translate_shape(shape, gp_Vec(3., 3., 3.));
+		BRepTools::Write(shape, "../shape.brep");
+
+	}
+
+	// 测试旋转
+	void rotate_shape() {
+		TopoDS_Shape shape;
+		BRep_Builder builder;
+		BRepTools::Read(shape, "../box33.brep", builder);
+		gp_Ax1 a1(gp_Pnt(0, 0, 0), gp_Dir(1.0, 0., 0.));
+		shape = transf::rotate_shape(shape, a1, M_PI/2);
+		BRepTools::Write(shape, "../shape.brep");
+	}
+
+	// 测试缩放
+	void scale_shape() {
+		TopoDS_Shape shape;
+		BRep_Builder builder;
+		BRepTools::Read(shape, "../box33.brep", builder);
+
+		shape = transf::scale_shape(shape, gp_Pnt(3, 4, 5), 6);
+		BRepTools::Write(shape, "../shape.brep");
+	}
+
+	// 测试镜面
+	void mirror_shape() {
+		TopoDS_Shape shape;
+		BRep_Builder builder;
+		BRepTools::Read(shape, "../box33.brep", builder);
+		gp_Ax2 a2(gp_Pnt(20, 0, 0), gp_Dir(1, 0, 0));
+		shape = transf::mirror_shape(shape, a2);
+		BRepTools::Write(shape, "../shape.brep");
+		
+	}
+
 }

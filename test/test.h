@@ -26,6 +26,10 @@ namespace test {
 	void make_hyperbola();
 	
 	void bool_box();
+	void transform_shape();
+	void rotate_shape();
+	void scale_shape();
+	void mirror_shape();
 
 
 }
