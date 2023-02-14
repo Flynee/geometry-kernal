@@ -32,6 +32,11 @@ namespace test {
 	void mirror_shape();
 
 	void copy_shape();
+	void boolean_union_shape();
+	void boolean_intersection_shape();
+	void boolean_cut_shape();
+
+	void shape_add();
 
 }
 

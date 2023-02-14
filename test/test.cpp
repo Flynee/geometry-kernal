@@ -255,4 +255,77 @@ namespace test {
 		BRepTools::Write(shape, "../shape.brep");
 	}
 
+	// 测试布尔 合并
+	void boolean_union_shape() {
+	
+		TopoDS_Shape shape1;
+		TopoDS_Shape shape2;
+		TopTools_ListOfShape objectShapes, toolShapes;
+
+		BRep_Builder builder;
+
+		BRepTools::Read(shape1, "../box33.brep", builder);
+		BRepTools::Read(shape2, "../box34.brep", builder);
+
+
+		TopoDS_Shape shape = tool::boolean_union_shape(shape1, shape2);
+		BRepTools::Write(shape, "../shape.brep");
+
+		
+	}
+
+	// 测试布尔相交
+	void boolean_intersection_shape() {
+		TopoDS_Shape shape1;
+		TopoDS_Shape shape2;
+		TopTools_ListOfShape objectShapes, toolShapes;
+
+		BRep_Builder builder;
+
+		BRepTools::Read(shape1, "../box33.brep", builder);
+		BRepTools::Read(shape2, "../box34.brep", builder);
+
+
+		TopoDS_Shape shape = tool::boolean_intersection_shape(shape1, shape2);
+		BRepTools::Write(shape, "../shape.brep");
+
+	}
+
+	// 测试布尔相减
+	void boolean_cut_shape() {
+		TopoDS_Shape shape1;
+		TopoDS_Shape shape2;
+		TopTools_ListOfShape objectShapes, toolShapes;
+
+		BRep_Builder builder;
+
+		BRepTools::Read(shape1, "../box33.brep", builder);
+		BRepTools::Read(shape2, "../box34.brep", builder);
+
+
+		TopoDS_Shape shape = tool::boolean_cut_shape(shape1, shape2);
+		BRepTools::Write(shape, "../shape.brep");
+
+	}
+
+	// 模型相加
+	void shape_add() {
+	
+		TopoDS_Shape shape1;
+		TopoDS_Shape shape2;
+		TopTools_ListOfShape objectShapes, toolShapes;
+
+		BRep_Builder builder;
+
+		BRepTools::Read(shape1, "../box33.brep", builder);
+		BRepTools::Read(shape2, "../box34.brep", builder);
+
+		TopTools_ListOfShape shapeList;
+		shapeList.Append(shape1);
+		shapeList.Append(shape2);
+
+		TopoDS_Shape shape = tool::shape_add(shapeList);
+		BRepTools::Write(shape, "../shape.brep");
+	}
+
 }

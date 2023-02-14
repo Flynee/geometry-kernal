@@ -5,7 +5,7 @@ int main() {
 
     std::cout<<"SYSTEM IS RUNNING..."<<std::endl;
     
-    test::copy_shape();
+    test::shape_add();
 
     return 0;
 
