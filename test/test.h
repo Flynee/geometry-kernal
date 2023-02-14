@@ -31,6 +31,7 @@ namespace test {
 	void scale_shape();
 	void mirror_shape();
 
+	void copy_shape();
 
 }
 

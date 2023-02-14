@@ -15,6 +15,7 @@
 
 #include"primitive.h"
 #include"transform.h"
+#include"tool.h"
 
 namespace test {
 	// 测试创建方体
@@ -243,6 +244,15 @@ namespace test {
 		shape = transf::mirror_shape(shape, a2);
 		BRepTools::Write(shape, "../shape.brep");
 		
+	}
+
+	// 测试拷贝功能
+	void copy_shape() {
+		TopoDS_Shape shape;
+		BRep_Builder builder;
+		BRepTools::Read(shape, "../box33.brep", builder);
+		shape = tool::copy_shape(shape);
+		BRepTools::Write(shape, "../shape.brep");
 	}
 
 }

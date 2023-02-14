@@ -5,7 +5,7 @@ int main() {
 
     std::cout<<"SYSTEM IS RUNNING..."<<std::endl;
     
-    test::mirror_shape();
+    test::copy_shape();
 
     return 0;
 
