@@ -37,6 +37,8 @@ namespace test {
 	void boolean_cut_shape();
 
 	void shape_add();
+	void shape_split();
+	void get_shape_bbox();
 
 }
 

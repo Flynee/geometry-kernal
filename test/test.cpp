@@ -2,9 +2,11 @@
 #include<math.h>
 #include<TopoDS.hxx>
 #include<BRepTools.hxx>
+#include<STEPControl_Writer.hxx>
 
-#include<BRepAlgoAPI_BooleanOperation.hxx>
 #include<BRep_Builder.hxx>
+#include<BRepBuilderAPI_MakeFace.hxx>
+#include<BRepAlgoAPI_BooleanOperation.hxx>
 #include<TopTools_ListOfShape.hxx>
 #include<TColgp_Array1OfPnt.hxx>
 #include<gp_Pnt.hxx>
@@ -12,6 +14,8 @@
 #include<gp_Ax1.hxx>
 #include<gp_Ax2.hxx>
 #include<gp_Dir.hxx>
+#include<gp_Pln.hxx>
+#include<Bnd_Box.hxx>
 
 #include"primitive.h"
 #include"transform.h"
@@ -328,4 +332,45 @@ namespace test {
 		BRepTools::Write(shape, "../shape.brep");
 	}
 
+	// 模型拆分 （例如将一个模型拆分成两部分）
+	void shape_split() {
+
+		TopoDS_Shape shape1;
+		TopTools_ListOfShape objectShapes, toolShapes;
+
+		BRep_Builder builder;
+
+		BRepTools::Read(shape1, "../box33.brep", builder);
+
+		objectShapes.Append(shape1);
+
+		gp_Pln gpl(gp_Pnt(0, 0, 0), gp_Dir(0, 1, 0));
+
+		BRepBuilderAPI_MakeFace face(gpl);
+		toolShapes.Append(face.Shape());
+
+
+		TopoDS_Shape shape = tool::shape_split(objectShapes, toolShapes);
+		BRepTools::Write(shape, "../shape.brep");
+		STEPControl_Writer stpWriter;
+		stpWriter.Transfer(shape, STEPControl_AsIs);
+		stpWriter.Write("../shape.stp");
+	}
+
+	// 获取模型bbox
+	void get_shape_bbox() {
+	
+		TopoDS_Shape shape;
+		BRep_Builder builder;
+		BRepTools::Read(shape, "../box33.brep", builder);
+
+		Bnd_Box bbox = tool::get_shape_bbox(shape);
+
+		gp_Pnt minPoint = bbox.CornerMin();
+		gp_Pnt maxPoint = bbox.CornerMax();
+
+		shape = prim::make_segment(minPoint, maxPoint);
+		BRepTools::Write(shape, "../shape.brep");
+
+	}
 }

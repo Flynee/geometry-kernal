@@ -7,6 +7,9 @@
 #include<BRepAlgoAPI_Cut.hxx>
 #include<BRepAlgoAPI_BuilderAlgo.hxx>
 #include<TopTools_ListOfShape.hxx>
+#include<BRepAlgoAPI_Splitter.hxx>
+#include<Bnd_Box.hxx>
+#include<BRepBndLib.hxx>
 
 namespace tool {
 
@@ -15,6 +18,17 @@ namespace tool {
 		TopoDS_Shape copy_shape;
 		copy_shape = BRepBuilderAPI_Copy(shape);
 		return copy_shape;
+	}
+
+	// 获取shape BBOX
+	Bnd_Box get_shape_bbox(const TopoDS_Shape& shape) {
+		Bnd_Box bbox;
+		BRepBndLib bbl;
+
+		bbl.Add(shape, bbox);
+
+		return bbox;
+		
 	}
 
 	// 布尔相并 (取并集)
@@ -56,4 +70,16 @@ namespace tool {
 		return  shape;
 	}
 
+	// shape 分离（将一个shape 分离成两个）
+	TopoDS_Shape shape_split(const TopTools_ListOfShape& shapes, const TopTools_ListOfShape& tools) {
+		BRepAlgoAPI_Splitter spliter;
+		spliter.SetArguments(shapes);
+		spliter.SetTools(tools);
+		spliter.Build();
+		TopoDS_Shape shape = spliter.Shape();
+
+		return shape;
+
+	
+	}
 }

@@ -5,7 +5,7 @@ int main() {
 
     std::cout<<"SYSTEM IS RUNNING..."<<std::endl;
     
-    test::shape_add();
+    test::shape_split();
 
     return 0;
 
