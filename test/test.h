@@ -39,6 +39,12 @@ namespace test {
 	void shape_add();
 	void shape_split();
 	void get_shape_bbox();
+	void linear_sweep_edge2face();
+	void linear_sweep_face2solid();
+	void rotate_sweep_edge2face();
+	void rotate_sweep_face2solid();
+	void path_sweep_edge2face();
+	void path_sweep_face2solid();
 
 }
 

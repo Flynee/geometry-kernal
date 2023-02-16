@@ -6,9 +6,12 @@
 
 #include<BRep_Builder.hxx>
 #include<BRepBuilderAPI_MakeFace.hxx>
+#include<BRepBuilderAPI_MakeEdge.hxx>
+#include<BRepBuilderAPI_MakeWire.hxx>
 #include<BRepAlgoAPI_BooleanOperation.hxx>
 #include<TopTools_ListOfShape.hxx>
 #include<TColgp_Array1OfPnt.hxx>
+#include<TopExp_Explorer.hxx>
 #include<gp_Pnt.hxx>
 #include<gp_Vec.hxx>
 #include<gp_Ax1.hxx>
@@ -16,6 +19,7 @@
 #include<gp_Dir.hxx>
 #include<gp_Pln.hxx>
 #include<Bnd_Box.hxx>
+#include<TopAbs_ShapeEnum.hxx>
 
 #include"primitive.h"
 #include"transform.h"
@@ -370,6 +374,69 @@ namespace test {
 		gp_Pnt maxPoint = bbox.CornerMax();
 
 		shape = prim::make_segment(minPoint, maxPoint);
+		BRepTools::Write(shape, "../shape.brep");
+
+	}
+
+	// 线性扫率，线扫掠成面
+	void linear_sweep_edge2face() {
+		TopoDS_Shape lineShape = prim::make_segment(gp_Pnt(0, 0, 0), gp_Pnt(2, 0, 0));
+
+		TopoDS_Shape shape = tool::linear_sweep(lineShape, gp_Vec(0, 2, 0));
+		BRepTools::Write(shape, "../shape.brep");
+	}
+
+	// 线性扫率，面扫率成体
+	void linear_sweep_face2solid() {
+		TopoDS_Shape panelShape = prim::make_rectangle_panel(gp_Pnt(0, 0, 0), gp_Pnt(2, 0, 0), gp_Pnt(2, 2, 0), gp_Pnt(0, 2, 0));
+
+		TopoDS_Shape shape = tool::linear_sweep(panelShape, gp_Vec(0, 0, 3));
+		BRepTools::Write(shape, "../shape.brep");
+	}
+
+	// 旋转扫率，线扫率成面
+	void rotate_sweep_edge2face() {
+		TopoDS_Shape lineShape = prim::make_segment(gp_Pnt(0, 0, 0), gp_Pnt(2, 0, 0));
+		gp_Ax1 ax1;
+
+		TopoDS_Shape shape = tool::rotate_sweep(lineShape, ax1, M_PI * 0.75);
+		BRepTools::Write(shape, "../shape.brep");
+	}
+
+	// 旋转扫率，面扫率成体
+	void rotate_sweep_face2solid() {
+		TopoDS_Shape panelShape = prim::make_rectangle_panel(gp_Pnt(0, 0, 0), gp_Pnt(2, 0, 0), gp_Pnt(2, 2, 0), gp_Pnt(0, 2, 0));
+
+		gp_Ax1 ax1(gp_Pnt(0, 0, 0), gp_Dir(1, 0, 0));
+
+		TopoDS_Shape shape = tool::rotate_sweep(panelShape, ax1, M_PI * 0.75);
+		BRepTools::Write(shape, "../shape.brep");
+	}
+
+	// 路径扫率，线扫率成面
+	void path_sweep_edge2face() {
+		TopoDS_Shape lineShape = prim::make_segment(gp_Pnt(0, 0, 0), gp_Pnt(2, 0, 0));
+		gp_Pnt list[] = { gp_Pnt(0, 0, 0), gp_Pnt(1, 0, 3), gp_Pnt(-1, 0, 5), gp_Pnt(0, 0, 7) };
+		int size = sizeof(list) / sizeof(list[0]);
+
+		TopoDS_Shape s = prim::make_polyline(list, size);
+		TopExp_Explorer te(s, TopAbs_ShapeEnum::TopAbs_WIRE);
+		TopoDS_Wire w = TopoDS::Wire(te.Current());
+		TopoDS_Shape shape = tool::path_sweep(w, lineShape);
+		BRepTools::Write(shape, "../shape.brep");
+		
+	}
+
+	// 路径扫率，面扫率成管道
+	void path_sweep_face2solid() {
+		TopoDS_Shape circleShape = prim::make_circle_panel(2);
+		gp_Pnt list[] = { gp_Pnt(0, 0, 0), gp_Pnt(1, 0, 3), gp_Pnt(-1, 0, 5), gp_Pnt(0, 0, 7) };
+		int size = sizeof(list) / sizeof(list[0]);
+
+		TopoDS_Shape s = prim::make_polyline(list, size);
+		TopExp_Explorer te(s, TopAbs_ShapeEnum::TopAbs_WIRE);
+		TopoDS_Wire w = TopoDS::Wire(te.Current());
+		TopoDS_Shape shape = tool::path_sweep(w, circleShape);
 		BRepTools::Write(shape, "../shape.brep");
 
 	}

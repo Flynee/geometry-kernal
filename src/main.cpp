@@ -5,7 +5,7 @@ int main() {
 
     std::cout<<"SYSTEM IS RUNNING..."<<std::endl;
     
-    test::shape_split();
+    test::path_sweep_face2solid();
 
     return 0;
 

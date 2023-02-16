@@ -10,6 +10,13 @@
 #include<BRepAlgoAPI_Splitter.hxx>
 #include<Bnd_Box.hxx>
 #include<BRepBndLib.hxx>
+#include<gp_Dir.hxx>
+#include<BRepPrimAPI_MakePrism.hxx>
+#include<BRepPrimAPI_MakeRevol.hxx>
+#include<BRepOffsetAPI_MakePipe.hxx>
+#include<GeomFill_Trihedron.hxx>
+
+
 
 namespace tool {
 
@@ -82,4 +89,33 @@ namespace tool {
 
 	
 	}
+
+	// 向量扫率
+	TopoDS_Shape linear_sweep(TopoDS_Shape& s, const gp_Vec& v) {
+		BRepPrimAPI_MakePrism prism(s, v);
+		prism.Build();
+		TopoDS_Shape shape = prism.Shape();
+
+		return shape;
+	}
+
+	// 旋转扫率
+	TopoDS_Shape rotate_sweep(const TopoDS_Shape& s, const gp_Ax1& ax1, const Standard_Real angle) {
+		BRepPrimAPI_MakeRevol revol(s, ax1, angle);
+		revol.Build();
+		TopoDS_Shape shape = revol.Shape();
+
+		return shape;
+	}
+
+	// 路径扫率（将一个面沿一个路径扫率成一个管道）
+	TopoDS_Shape path_sweep(const TopoDS_Wire& w, const TopoDS_Shape& s, const GeomFill_Trihedron m) {
+		BRepOffsetAPI_MakePipe mp(w, s, m);
+		mp.Build();
+		TopoDS_Shape shape = mp.Shape();
+
+		return shape;
+	}
+
+
 }
