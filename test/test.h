@@ -45,7 +45,9 @@ namespace test {
 	void rotate_sweep_face2solid();
 	void path_sweep_edge2face();
 	void path_sweep_face2solid();
-
+	void line_connect2face();
+	void fill_closure_edge2face();
+	void shape_line_array();
 }
 
 

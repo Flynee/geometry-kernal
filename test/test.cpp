@@ -396,8 +396,8 @@ namespace test {
 
 	// 旋转扫率，线扫率成面
 	void rotate_sweep_edge2face() {
-		TopoDS_Shape lineShape = prim::make_segment(gp_Pnt(0, 0, 0), gp_Pnt(2, 0, 0));
-		gp_Ax1 ax1;
+		TopoDS_Shape lineShape = prim::make_segment(gp_Pnt(0, 0, 0), gp_Pnt(2, 1, 0));
+		gp_Ax1 ax1(gp_Pnt(0, 0, 0), gp_Dir(1, 0, 0));
 
 		TopoDS_Shape shape = tool::rotate_sweep(lineShape, ax1, M_PI * 0.75);
 		BRepTools::Write(shape, "../shape.brep");
@@ -439,5 +439,51 @@ namespace test {
 		TopoDS_Shape shape = tool::path_sweep(w, circleShape);
 		BRepTools::Write(shape, "../shape.brep");
 
+	}
+
+	// 对连，两个边构造成面
+	void line_connect2face() {
+		
+		TopoDS_Shape shape1;
+		TopoDS_Shape shape2;
+
+		BRep_Builder builder;
+		BRepTools::Read(shape1, "../e1.brep", builder);
+		BRepTools::Read(shape2, "../e2.brep", builder);
+
+
+		TopExp_Explorer te(shape1, TopAbs_ShapeEnum::TopAbs_EDGE);
+		TopExp_Explorer te2(shape2, TopAbs_ShapeEnum::TopAbs_EDGE);
+
+
+		TopoDS_Edge e1 = TopoDS::Edge(te.Current());
+		TopoDS_Edge e2 = TopoDS::Edge(te2.Current());
+
+		TopoDS_Shape shape = tool::line_connect2face(e1, e2);
+
+		BRepTools::Write(shape, "../shape.brep");
+	}
+
+	// 边界填充
+	void fill_closure_edge2face() {
+		BRepBuilderAPI_MakeEdge e1(gp_Pnt(0, 0, 0), gp_Pnt(2, 0, 0));
+		BRepBuilderAPI_MakeEdge e2(gp_Pnt(2, 0, 0), gp_Pnt(0, 1, 0));
+		BRepBuilderAPI_MakeEdge e3(gp_Pnt(0, 1, 0), gp_Pnt(0, 0, 0));
+
+		TopoDS_Edge list[] = { e1.Edge(), e2.Edge(), e3.Edge() };
+
+		TopoDS_Shape shape = tool::fill_closure_edge2face(list, 3);
+
+		BRepTools::Write(shape, "../shape.brep");
+	}
+
+	// 线性阵列模型
+	void shape_line_array() {
+		TopoDS_Shape shape1;
+		BRep_Builder builder;
+		BRepTools::Read(shape1, "../box33.brep", builder);
+
+		TopoDS_Shape shape = tool::shape_line_array(shape1, 21, 21, 21, 50., 60., 70.);
+		BRepTools::Write(shape, "../shape.brep");
 	}
 }
