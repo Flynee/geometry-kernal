@@ -483,7 +483,7 @@ namespace test {
 		BRep_Builder builder;
 		BRepTools::Read(shape1, "../box33.brep", builder);
 
-		TopoDS_Shape shape = tool::shape_line_array(shape1, 21, 21, 21, 50., 60., 70.);
+		TopoDS_Shape shape = tool::shape_line_array(shape1, 3, 3, 3, 50., 60., 70.);
 		BRepTools::Write(shape, "../shape.brep");
 	}
 }
