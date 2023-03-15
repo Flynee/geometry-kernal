@@ -4,9 +4,8 @@
 int main() {
 
     std::cout<<"SYSTEM IS RUNNING..."<<std::endl;
-    
-    test::shape_line_array();
 
+    test::make_ellipsoid();
     return 0;
 
 }

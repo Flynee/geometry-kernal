@@ -1,3 +1,4 @@
+#include <fstream>
 #include<iostream>
 #include<math.h>
 #include<TopoDS.hxx>
@@ -20,7 +21,7 @@
 #include<gp_Pln.hxx>
 #include<Bnd_Box.hxx>
 #include<TopAbs_ShapeEnum.hxx>
-
+#include<STEPControl_Reader.hxx>
 #include"primitive.h"
 #include"transform.h"
 #include"tool.h"
@@ -141,7 +142,7 @@ namespace test {
 
 	// 测试创建抛物面
 	void make_paraboloid_panel() {
-		
+
 		const TopoDS_Shape& shape = prim::make_paraboloid_panel(0., 4.0, 1.0);
 		BRepTools::Write(shape, "../shape.brep");
 	}
@@ -150,7 +151,7 @@ namespace test {
 	void make_segment() {
 		const TopoDS_Shape& shape = prim::make_segment(gp_Pnt(0, 0, 0), gp_Pnt(2, 0, 0));
 		BRepTools::Write(shape, "../shape.brep");
-		
+
 	}
 
 	// 测试创建折线
@@ -189,7 +190,7 @@ namespace test {
 		gp_Pnt p3(2., -1., 0.);
 		gp_Pnt p4(4, 1., 0.);
 
-		TColgp_Array1OfPnt list(1, 4); // sizing array                  
+		TColgp_Array1OfPnt list(1, 4); // sizing array
 		list.SetValue(1, p1);
 		list.SetValue(2, p2);
 		list.SetValue(3, p3);
@@ -204,7 +205,7 @@ namespace test {
 		const TopoDS_Shape& shape = prim::make_parabola(-4.0, 4.0, 1.0);
 		BRepTools::Write(shape, "../shape.brep");
 	}
-	
+
 	// 测试创建双曲线
 	void make_hyperbola() {
 		const TopoDS_Shape& shape = prim::make_hyperbola(4.0, 2.0, -2.0, 2.0);
@@ -251,7 +252,7 @@ namespace test {
 		gp_Ax2 a2(gp_Pnt(20, 0, 0), gp_Dir(1, 0, 0));
 		shape = transf::mirror_shape(shape, a2);
 		BRepTools::Write(shape, "../shape.brep");
-		
+
 	}
 
 	// 测试拷贝功能
@@ -265,7 +266,7 @@ namespace test {
 
 	// 测试布尔 合并
 	void boolean_union_shape() {
-	
+
 		TopoDS_Shape shape1;
 		TopoDS_Shape shape2;
 		TopTools_ListOfShape objectShapes, toolShapes;
@@ -279,7 +280,7 @@ namespace test {
 		TopoDS_Shape shape = tool::boolean_union_shape(shape1, shape2);
 		BRepTools::Write(shape, "../shape.brep");
 
-		
+
 	}
 
 	// 测试布尔相交
@@ -318,7 +319,7 @@ namespace test {
 
 	// 模型相加
 	void shape_add() {
-	
+
 		TopoDS_Shape shape1;
 		TopoDS_Shape shape2;
 		TopTools_ListOfShape objectShapes, toolShapes;
@@ -363,7 +364,7 @@ namespace test {
 
 	// 获取模型bbox
 	void get_shape_bbox() {
-	
+
 		TopoDS_Shape shape;
 		BRep_Builder builder;
 		BRepTools::Read(shape, "../box33.brep", builder);
@@ -424,7 +425,7 @@ namespace test {
 		TopoDS_Wire w = TopoDS::Wire(te.Current());
 		TopoDS_Shape shape = tool::path_sweep(w, lineShape);
 		BRepTools::Write(shape, "../shape.brep");
-		
+
 	}
 
 	// 路径扫率，面扫率成管道
@@ -443,7 +444,7 @@ namespace test {
 
 	// 对连，两个边构造成面
 	void line_connect2face() {
-		
+
 		TopoDS_Shape shape1;
 		TopoDS_Shape shape2;
 
@@ -483,7 +484,28 @@ namespace test {
 		BRep_Builder builder;
 		BRepTools::Read(shape1, "../box33.brep", builder);
 
-		TopoDS_Shape shape = tool::shape_line_array(shape1, 3, 3, 3, 50., 60., 70.);
+		TopoDS_Shape shape = tool::shape_line_array(shape1, 40, 40, 1, 50., 60., 70.);
+		BRepTools::Write(shape, "../shape.brep");
+	}
+
+	void shape_sphere_array() {
+		TopoDS_Shape shape1;
+		
+		STEPControl_Reader reader;
+		reader.ReadFile("../CAD.stp");
+		reader.TransferRoots();
+		shape1 = reader.OneShape();
+
+		TopoDS_Shape shape = tool::shape_sphere_array(shape1,
+			 0,  0,  0,  80, // 圆心 0，0，0 半径 80
+			 10,  10,  0, // x 阵列数量 10，y 阵列数量 10， z 阵列数量 0，
+			 20,  20, 0);  // x 轴阵列间距 20，y 轴阵列间距 20， z 轴阵列间距 0，
+		BRepTools::Write(shape, "../shape.brep");
+	}
+
+	void make_ellipsoid() {
+	
+		TopoDS_Shape shape = prim::make_ellipsoid(1., 1., 1., 2.);
 		BRepTools::Write(shape, "../shape.brep");
 	}
 }

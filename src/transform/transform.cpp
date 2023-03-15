@@ -7,6 +7,7 @@
 #include<gp_Mat.hxx>
 #include<gp_Ax1.hxx>
 #include<gp_Ax2.hxx>
+#include<TopoDS.hxx>
 
 namespace transf {
 

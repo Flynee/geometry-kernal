@@ -14,6 +14,7 @@ namespace prim {
 		TopoDS_Shape make_sphere(Standard_Real r);
 		TopoDS_Shape make_torus(Standard_Real r1, Standard_Real r2);
 		TopoDS_Shape make_prism(Standard_Real dx, Standard_Real dy, Standard_Real dz, Standard_Real xmin, Standard_Real zmin, Standard_Real xmax, Standard_Real zmax);
+		TopoDS_Shape make_ellipsoid(Standard_Real r, Standard_Real xscale, Standard_Real yscale, Standard_Real zscale);
 
 
 

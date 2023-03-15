@@ -32,7 +32,9 @@
 #include<TColgp_Array1OfPnt.hxx>
 #include<gp_Hypr.hxx>
 #include<GC_MakeArcOfHyperbola.hxx>
-
+#include<gp_GTrsf.hxx>
+#include<gp_Mat.hxx>
+#include<BRepBuilderAPI_GTransform.hxx>
 
 namespace prim {
 
@@ -78,7 +80,21 @@ namespace prim {
 		return shape;
 	}
 
-	// 椭圆体 TODO
+	// 椭圆体(正球体缩放形成)
+	TopoDS_Shape make_ellipsoid(Standard_Real r, Standard_Real xscale, Standard_Real yscale, Standard_Real zscale) {
+		BRepPrimAPI_MakeSphere sphere(r);
+		sphere.Build();
+		
+		if (sphere.IsDone()) {
+			gp_GTrsf gtrs;
+			gp_Mat rot(xscale, 0, 0, 0, yscale, 0, 0, 0, zscale);
+			gtrs.SetVectorialPart(rot);
+			BRepBuilderAPI_GTransform myBRepTransformation(sphere.Shape(), gtrs);
+			TopoDS_Shape shape = myBRepTransformation.Shape();
+
+			return shape;
+		}
+	}
 
 	// 三角形面
 	TopoDS_Shape make_triangle_panel(const gp_Pnt& p1, const gp_Pnt& p2, const gp_Pnt& p3) {

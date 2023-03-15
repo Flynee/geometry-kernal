@@ -5,6 +5,8 @@
 #include<TopTools_ListOfShape.hxx>
 #include<gp_Dir.hxx>
 #include<GeomFill_Trihedron.hxx>
+#include<map>
+#include<vector>
 
 namespace tool {
 
@@ -23,6 +25,11 @@ namespace tool {
 	TopoDS_Shape shape_line_array(TopoDS_Shape& shape,
 		int x_num = 1, int y_num = 1, int z_num = 1,
 		const Standard_Real dx = 0, const Standard_Real dy = 0, const Standard_Real dz = 0, bool link = true);
+	std::map<int, std::map<int, std::vector<int>>> analyze_topo(const TopoDS_Shape& shape);
+	TopoDS_Shape shape_sphere_array(TopoDS_Shape& shape,
+		Standard_Real x, Standard_Real y, Standard_Real z, Standard_Real r,
+		Standard_Real x_num, Standard_Real y_num, Standard_Real z_num,
+		Standard_Real dx, Standard_Real dy, Standard_Real dz);
 }
 
 #endif // !__TOOL_H__

@@ -9,6 +9,7 @@ namespace test {
 	void make_sphere();
 	void make_torus();
 	void make_prism();
+	void make_ellipsoid();
 
 	void make_circle_panel();
 	void make_ellipse_panel();
@@ -24,7 +25,7 @@ namespace test {
 	void make_besizer_curve();
 	void make_parabola();
 	void make_hyperbola();
-	
+
 	void bool_box();
 	void transform_shape();
 	void rotate_shape();
@@ -48,6 +49,9 @@ namespace test {
 	void line_connect2face();
 	void fill_closure_edge2face();
 	void shape_line_array();
+	void shape_sphere_array();
+
+
 }
 
 
